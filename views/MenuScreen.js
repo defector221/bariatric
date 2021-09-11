@@ -205,7 +205,7 @@ const MenuScreen = props => {
          })}>
          <DetailsText>
            Details 
-           <MaterialCommunityIcons name="greater-than" size={10} color="#4FB6AD"/>
+           {/* <MaterialCommunityIcons name="greater-than" size={10} color="#4FB6AD"/> */}
          </DetailsText>
          </TouchableOpacity>
         
