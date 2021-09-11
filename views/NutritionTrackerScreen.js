@@ -101,10 +101,12 @@ const NutritionTrackerScreen = props => {
       console.log("image data", receivedImageData.item_ingredient);
       let formatedForTableData = receivedImageData.request_data[0].item_ingredient.map((data)=>{
         return [data.ingredient,data.value] })
+        console.log('formated table data',formatedForTableData);
+        console.log('received data',receivedImageData.request_data[0])
       setTableData(formatedForTableData);
       setTableDetails(receivedImageData.request_data[0])
     } else {
-      alert("No Data");
+      console.log("No Data");
     }
   },[uri])
 
@@ -158,29 +160,48 @@ const NutritionTrackerScreen = props => {
             flexDirection: 'row',
             margin: 10,
             width: 167,
-            height: 35,
+            height: 40,
             backgroundColor: '#CFEFE9',
             borderRadius: 12,
             padding: 8,
           }}>
             <Text style={{ fontSize: 14, }}>Amount -100grams </Text>
-            <Ionicons name="md-chevron-down-outline" size={22} color="#4FB6AD" />
           </View>
           <View style={{
             flexDirection: 'row',
             margin: 10,
-            width: 97,
-            height: 35,
+            width: 100,
+            height: 40,
             backgroundColor: '#CFEFE9',
             borderRadius: 12,
           }}>
-            <Text style={{ margin: 8, fontSize: 14, color: '#4FB6AD' }}>
-              Calories 227
+            <Text style={{ margin: 8, fontSize: 14, color: '#000' }}>
+              Calories {tableData && tableData[0] && tableData[0][1]? tableData[0][1]: 0}
             </Text>
           </View>
 
         </View>
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'baseline',
+          justifyContent: 'space-between',
+          height: 45,
+        }}>
+          <View style={{
+            flexDirection: 'row',
+            margin: 10,
+            width: 230,
+            height: 40,
+            backgroundColor: '#CFEFE9',
+            borderRadius: 12,
+            padding: 8,
+          }}>
+             <Text>Calorie per byte(30gm) {tableData && tableData[0] && tableData[0][1]? ((tableData[0][1] * 0.3) || 0).toFixed(2) || 0 : 0}</Text>
+          </View>
+          </View>
         <Table style={{margin:10,backgroundColor:'#CFEFE9',borderRadius:10,padding:10}}>
+         
         <Row
           data={CONTENT.tableHead}
           flexArr={[1, 2, 1, 1]}
