@@ -51,7 +51,7 @@ const CameraScreen = props => {
     const option={quality:0.5,base64:true,skipProcessing:false}
     
     const image = await cam.current.takePictureAsync(option);
-    console.log('GOT IMAGE');
+    console.log('GOT IMAGE', image);
     const noHeader = image.base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "")
     //console.log(image)
     if(image.base64){
