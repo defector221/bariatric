@@ -14,7 +14,7 @@ import Colors from '../constants/Colors'
 import CardItem from '../components/CardItem';
 import Page from '../components/Page';
 
-const MealPlannerScreen1 = props => {
+const MealPlannerScreen1 = ({navigation}) => {
   const CustomTabView = styled.View`
   display:flex;
   align-items:baseline;
@@ -72,7 +72,9 @@ const MealPlannerScreen1 = props => {
     </CustomTabView>
     <CardItem
     color='#FAFAFA'
-    height='150px'>
+    height='150px' onSelect={() => {
+      navigation.navigate('PDFScreen', { uri: 'https://bariatric-rahul.s3.ap-south-1.amazonaws.com/week-meal-plan.pdf' })
+  }}>
         <Image source={require('../assets/mealPlannerIcon.png')} style={{ position: 'absolute', height: 150, width: 120 }} />
         
         <HeadText>Bariatric 1 week Meal Plan</HeadText>
@@ -85,7 +87,9 @@ const MealPlannerScreen1 = props => {
     </CustomTabView>
     <CardItem
     color='#FAFAFA'
-    height='150px'>
+    height='150px' onSelect={() => {
+      navigation.navigate('PDFScreen', { uri: 'https://bariatric-rahul.s3.ap-south-1.amazonaws.com/Stage1.pdf' })
+  }}>
         <Image source={require('../assets/day1.png')} style={{ position: 'absolute', height: 150, width: 120 }} />
         
         <HeadText>Day 1</HeadText>
@@ -94,7 +98,9 @@ const MealPlannerScreen1 = props => {
     </CardItem>
     <CardItem
     color='#FAFAFA'
-    height='150px'>
+    height='150px' onSelect={() => {
+      navigation.navigate('PDFScreen', { uri: 'https://bariatric-rahul.s3.ap-south-1.amazonaws.com/Stage2.pdf' })
+  }}>
         <Image source={require('../assets/day2.png')} style={{ position: 'absolute', height: 150, width: 120 }} />
         
         <HeadText>Day 2</HeadText>
@@ -103,18 +109,20 @@ const MealPlannerScreen1 = props => {
     </CardItem>
     <CardItem
     color='#FAFAFA'
-    height='150px'>
+    height='150px' onSelect={() => {
+      navigation.navigate('PDFScreen', { uri: 'https://bariatric-rahul.s3.ap-south-1.amazonaws.com/Stage3.pdf' })
+  }}>
         <Image source={require('../assets/day3.png')} style={{ position: 'absolute', height: 150, width: 120 }} />
         
         <HeadText>Day 3</HeadText>
         
         <Description>Well defined meal plan with a set of grocery list</Description>
     </CardItem>
-    <TouchableOpacity onPress={() => console.log('Logout')}>
+    {/* <TouchableOpacity onPress={() => console.log('Logout')}>
           <View style={styles.customBtn}>
               <Text style={{ color: 'black' }}>Save</Text>
           </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
   </Page>
   );
 };

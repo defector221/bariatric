@@ -44,6 +44,7 @@ import ProfilePage from '../views/ProfilePage';
 import AllTrackers from '../views/AllTrackers';
 import PointsandRewardsScreen from '../views/Points&Rewards';
 import HealthPlanner from '../views/HealthPlanner';
+import PDFViewer from '../components/PDFViewer';
 
 
 const defaultStackNavOptions = {
@@ -324,6 +325,12 @@ const DashboardStackNavigator =createStackNavigator({
   },
   HealthPlanner:{
     screen:HealthPlanner,
+    navigationOptions:{
+      title:'Health Planner'
+    }
+  },
+  PDFScreen:{
+    screen: PDFViewer,
     navigationOptions:{
       title:'Health Planner'
     }
