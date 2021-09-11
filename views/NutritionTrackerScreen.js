@@ -130,12 +130,12 @@ const NutritionTrackerScreen = props => {
       }
       <Page>
         <HeaderView>
-          <DetailsView>
+          {/* <DetailsView>
             <Foundation name="calendar" size={22} color="#4FB6AD" style={{ padding: 6 }} />
             <DetailsText style={{ padding: 6 }}>Today</DetailsText>
             
             <Ionicons name="md-chevron-down-outline" size={22} color="#4FB6AD" style={{ padding: 6 }} />
-          </DetailsView>
+          </DetailsView> */}
           <TouchableOpacity onPress={openImagePickerAsync}>
             <AntDesign name="upload" size={22} color="#0A0E0D" />
           </TouchableOpacity>

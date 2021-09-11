@@ -226,7 +226,7 @@ const DashboardStackNavigator =createStackNavigator({
   NutritionTrackerScreen: {
     screen: NutritionTrackerScreen,
     navigationOptions: {
-      title: 'Nutritution Tracker',
+      title: 'Nutrition Tracker',
     }
   },
   SleepTracker: {
