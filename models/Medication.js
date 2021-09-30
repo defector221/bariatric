@@ -9,6 +9,9 @@ export const BEFORE_OR_AFTER_FOOD = {
     AFTER_FOOD: 'After food'
 }
 export class Medication {
+    static getKey(date) {
+        return `medication-${date.valueOf()}`;
+    }
     constructor(
         id,
         name,

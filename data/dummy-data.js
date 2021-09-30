@@ -349,17 +349,17 @@ export const Medications = [
         false
     ),
     new Medication(
-        1,
+        2,
         'Bupropion-naltrexone(Contrave) 2',
-        TIME_OF_DAY.MORNING,
+        TIME_OF_DAY.AFTER_NOON,
         '1 tablet',
-        '9:00 am',
+        '9:10 am',
         BEFORE_OR_AFTER_FOOD.AFTER_FOOD,
         '5 days',
-        false
+        true
     ),
     new Medication(
-        1,
+        3,
         'Bupropion-naltrexone(Contrave) 3',
         TIME_OF_DAY.NIGHT,
         '1 tablet',
@@ -369,7 +369,7 @@ export const Medications = [
         false
     ),
     new Medication(
-        1,
+        4,
         'Bupropion-naltrexone(Contrave)',
         TIME_OF_DAY.NIGHT,
         '1 tablet',
