@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import styled from 'styled-components';
 
@@ -8,6 +8,7 @@ import CircleImage from '../components/CircleImage';
 import Colors from '../constants/Colors';
 
 export default function HealthPlanner({ navigation }) {
+    // const [showPdf, setShowPDF] = useState(false);
 
     const CardView = styled.View`
  flex-direction:row;
@@ -39,8 +40,8 @@ export default function HealthPlanner({ navigation }) {
 
     return (
         <Page>
-
-
+            
+            {/* {showPdf && <PDFViewer /> : <> */}
             <CardItem
                 color="#FAFAFA"
                 height="215px"
@@ -48,7 +49,7 @@ export default function HealthPlanner({ navigation }) {
                 <CardView>
                     <CircleImage src={require('../assets/workout.png')} title="Workout"
                         onSelect={() => {
-                            console.log('Workout')
+                            navigation.navigate('PDFScreen', { uri: 'https://bariatric-rahul.s3.ap-south-1.amazonaws.com/Workout.pdf' })
                         }}
                     />
                     <CircleImage src={require('../assets/hobbies.png')}
