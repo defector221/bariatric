@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput ,TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EntypoIcon  from '@expo/vector-icons/Entypo';
-import Utils from '../utility/Utils';
+import Utils from '../utility/utils';
 
 export default function RegisterThroghEmail({navigation}) {
   const [email, onEmailChanges] = React.useState("");

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity,Dimensions, StatusBar,Image,TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import Utils from '../utility/Utils';
+import Utils from '../utility/utils';
 
 const {width,height}=Dimensions.get('window');
 
