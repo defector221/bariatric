@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react';
 import { View, useWindowDimensions, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { Medications } from '../data/dummy-data'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AsyncStorage } from 'react-native';
 
@@ -219,11 +218,14 @@ export default function ReminderScreen({ navigation })
 {
     const layout = useWindowDimensions();
     const params = navigation.state.params;
+    const [date, setDate] = useState(new Date());
     let date2 = new Date();
     if(params && params.date) {
-        date2 = params.date;
+        date2 = new Date(params.date);
+        delete navigation.state.params.date;
+        setDate(date2);
     }
-    const [date, setDate] = useState(date2);
+    
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [medications, setMedications] = useState([]);
@@ -256,7 +258,6 @@ export default function ReminderScreen({ navigation })
             } else {
                 medications = [];
             }
-            console.log(medications);
             setMedications(medications);
             setRoutes(getRoutes(medications));
             navigation.medications = medications;

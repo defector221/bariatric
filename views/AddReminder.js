@@ -37,7 +37,7 @@ export default function AddReminder({ navigation })
         }
     }
 
-    const onSubmit = ({ medicine }) =>
+    const onSubmit = () =>
     {
         const key = Medication.getKey(date);
         AsyncStorage.getItem(key)
@@ -45,9 +45,9 @@ export default function AddReminder({ navigation })
             let medications;
             if (medicationsStr) {
                 medications = JSON.parse(medicationsStr);
-                medications.push(medicine);
+                medications.push(formMed);
             } else {
-                medications = [medicine];
+                medications = [formMed];
             }
             AsyncStorage.setItem(key, JSON.stringify(medications))
             .then(() => {
@@ -69,7 +69,17 @@ export default function AddReminder({ navigation })
     padding:10px
     margin:10px
     `
-
+    const formMed = new Medication(
+        Date.now(),
+        'Paracetamol',
+        TIME_OF_DAY.MORNING,
+        '1 tablet',
+        '9:00 am',
+        BEFORE_OR_AFTER_FOOD.BEFORE_FOOD,
+        '5 days',
+        false,
+        date
+    );
     return (
         <Page>
             <CardItem color='#FAFAFA'
@@ -108,48 +118,51 @@ export default function AddReminder({ navigation })
                     }}
                     onSubmit={onSubmit}
                 >
-                    {({ handleChange, handleBlur, handleSubmit, setFieldValue, values }) => (
+                    {({ handleSubmit, values }) => (
                         <View>
                             <CustomInput
-                                onChangeText={handleChange('name')}
-                                onBlur={handleBlur('name')}
-                                value={values.medicine.name}
+                                onChangeText={text => {
+                                    formMed.name = text;
+                                }}
+                                defaultValue={formMed.name}
                                 placeholder="Medicine Name"
                             />
                             <ColView>
                                 <CustomInput
-                                    onChangeText={() => handleChange('duration')}
-                                    onBlur={() => handleBlur('duration')}
-                                    value={values.medicine.duration}
-                                    keyboardType="numeric"
+                                    onChangeText={text => {
+                                        formMed.duration = text;
+                                    }}
                                     placeholder="Days"
+                                    defaultValue={formMed.duration}
                                     style={{ width: 142 }}
                                 />
                                 <CustomInput
-                                    onChangeText={() => handleChange('time')}
-                                    onBlur={() => handleBlur('time')}
-                                    value={values.medicine.time}
-                                    keyboardType="numeric"
+                                    onChangeText={text => {
+                                        formMed.time = text;
+                                    }}
                                     placeholder="Time"
+                                    defaultValue={formMed.time}
                                     style={{ width: 142 }}
                                 />
 
                             </ColView>
                             <ColView>
                                 <CustomInput
-                                    onChangeText={() => handleChange('quantity')}
-                                    onBlur={() => handleBlur('quantity')}
-                                    value={values.medicine.quantity}
-                                    keyboardType="numeric"
+                                    onChangeText={text => {
+                                        formMed.quantity = text;
+                                    }}
                                     placeholder="Dose"
+                                    defaultValue={formMed.quantity}
                                     style={{ width: 142 }}
                                 />
                             </ColView>
                             <Picker
                                 // passing value directly from formik
-                                selectedValue={values.medicine.timeOfDay}
+                                selectedValue={formMed.timeOfDay}
                                 // changing value in formik
-                                onValueChange={itemValue => setFieldValue('timeOfDay', itemValue)}
+                                onValueChange={itemValue => {
+                                    formMed.timeOfDay = itemValue;
+                                }}
                                 style={{ marginTop: 20 }}
                             >
                                 <Picker.Item label='Morning' value={TIME_OF_DAY.MORNING} key={'MORNING'} />
@@ -158,9 +171,13 @@ export default function AddReminder({ navigation })
                             </Picker>
                             <Picker
                                 // passing value directly from formik
-                                selectedValue={values.medicine.beforeOrAfterFood}
+                                selectedValue={formMed.beforeOrAfterFood}
                                 // changing value in formik
-                                onValueChange={itemValue => setFieldValue('beforeOrAfterFood', itemValue)}
+                                onValueChange={itemValue => {
+                                    {
+                                        formMed.beforeOrAfterFood = itemValue;
+                                    }
+                                }}
                                 style={{ marginTop: 20 }}
                             >
                                 <Picker.Item label='Before Food' value={BEFORE_OR_AFTER_FOOD.BEFORE_FOOD} key={'BEFORE_FOOD'} />
