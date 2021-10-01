@@ -2,12 +2,26 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput ,TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EntypoIcon  from '@expo/vector-icons/Entypo';
-
+import Utils from '../utility/Utils';
 
 export default function RegisterThroghEmail({navigation}) {
-  const [text, onChangeText] = React.useState("janedoe11@gmail.com");
-  const [password, onChangePassword] = React.useState("Password");
-  const [name, onChangeName] = React.useState("Jane Doe");
+  const [email, onEmailChanges] = React.useState("");
+  const [password, onChangePassword] = React.useState("");
+  const [firstName, onfirstName] = React.useState("");
+  const [lastName, onlastName] = React.useState("");
+  const [phoneNumber, onphoneNumber] = React.useState("");
+
+  const _doSignUp = () => {
+    Utils.doSignUp({
+      phone_number: phoneNumber,
+      email: email,
+      first_name: firstName,
+      last_name: lastName,
+      password,
+    }, function(){
+      navigation.navigate('Login')
+    })
+  }
 
   return (
     <View style={styles.headView}>
@@ -16,8 +30,8 @@ export default function RegisterThroghEmail({navigation}) {
         <TextInput
           style={styles.input}
           placeholder="Email ID"
-          onChangeText={onChangeText}
-          value={text}
+          onChangeText={onEmailChanges}
+          value={email}
           underlineColorAndroid="transparent"
         />
         <Icon style={styles.icon} name="check" size={20} color="#4FB6AD" />
@@ -37,9 +51,29 @@ export default function RegisterThroghEmail({navigation}) {
       <View style={styles.viewSection}>
         <TextInput
           style={styles.input}
-          placeholder="Name"
-          onChangeText={onChangeName}
-          value={name}
+          placeholder="First Name"
+          onChangeText={onfirstName}
+          value={firstName}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+
+      <View style={styles.viewSection}>
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          onChangeText={onlastName}
+          value={lastName}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+
+      <View style={styles.viewSection}>
+        <TextInput
+          style={styles.input}
+          placeholder="Phone"
+          onChangeText={onphoneNumber}
+          value={phoneNumber}
           underlineColorAndroid="transparent"
         />
       </View>
@@ -47,9 +81,9 @@ export default function RegisterThroghEmail({navigation}) {
       <Text style={styles.text}>Password should be a minimum of 8 characters and should contain letters and numbers</Text>
 
 
-      <TouchableOpacity onPress={()=>navigation.navigate('RegisterWithPhone')}>
+      <TouchableOpacity onPress={()=> _doSignUp()}>
         <View style={styles.customBtn}>
-        <Text style={{ color: 'black' }}>Next</Text>
+        <Text style={{ color: 'black' }}>Sign Up</Text>
         </View>
       </TouchableOpacity>
     </View>

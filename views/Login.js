@@ -1,32 +1,23 @@
 import React, { useState } from 'react';
-import PostData from '../data/services/PostData'
 import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity,Dimensions, StatusBar,Image,TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import Utils from '../utility/Utils';
 
 const {width,height}=Dimensions.get('window');
 
 export default function Login({navigation}) {
   
-  const [text,onChangeText]=useState("Email");
-  const [password,onChangePassword]=useState();
-  const login = (user, pass) => { 
-    PostData("", {email: user, password: pass})
-    .then( result => {
-      console.log(result);
-      if(result === 'Data Matched')
-        {
-         // console.log('login Sucessful');
-            //Then open Profile activity and send user email to profile activity.
-            navigation.navigate('NutritionTrackerScreen1')
- 
-        }
-        else{
- 
-          Alert.alert(result);
-        }
-      
-     })
+  const [text,onChangeText]=useState("");
+  const [password,onChangePassword]=useState("");
+  const login = () => { 
+    Utils.doLogin(text, password, function(res){
+      if(res.status == 200){
+        navigation.navigate('DashboardScreen')
+      }else{
+        Alert.alert("Login", res.message);
+      }
+    })
   }
 
   return (
@@ -63,7 +54,7 @@ export default function Login({navigation}) {
         <Icon style={styles.icon} name="arrowright" size={20} color="#000" />
       </View>
        
-      <TouchableOpacity onPress={()=>navigation.navigate('DashboardScreen')}>
+      <TouchableOpacity onPress={()=> login()}>
         <View style={styles.customBtn}>
         <Text style={{ color: 'black' }}>Next</Text>
         </View>
