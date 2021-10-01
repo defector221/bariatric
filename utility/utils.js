@@ -39,5 +39,26 @@ export default Utils =  {
         }).catch(res => {
             callback && callback(res)
         });
+    },
+
+    getMyProfile: function(callback){
+        const loginRes = await AsyncStorage.getItem('@LOGIN::USER::RES'); 
+        const token  = loginRes.token;
+
+        fetch(`https://kalendars.io/api/v1/users/me`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => res.json()).then(json => {
+            AsyncStorage.setItem('LOGIN::USER::RES', JSON.stringify(json))
+            .then(() => {
+                callback && callback({status: 200})
+            });
+        }).catch(res => {
+            callback && callback(res)
+        });
     }
 }
