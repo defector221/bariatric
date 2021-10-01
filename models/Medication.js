@@ -10,7 +10,7 @@ export const BEFORE_OR_AFTER_FOOD = {
 }
 export class Medication {
     static getKey(date) {
-        return `medication-${date.valueOf()}`;
+        return `medication-${date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear()}`;
     }
     constructor(
         id,

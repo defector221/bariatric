@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, useWindowDimensions, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { Medications } from '../data/dummy-data'
@@ -124,7 +124,7 @@ const Taken = ({ ...navigation }) => (
     <View>
         <CustomTabView>
             <SubText>Morning</SubText>
-            <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
                 <Ionicons name="add" size={20} color={Colors.textColor} />
             </TouchableOpacity>
         </CustomTabView>
@@ -138,7 +138,7 @@ const Taken = ({ ...navigation }) => (
         }
         <CustomTabView>
             <SubText>Afternoon</SubText>
-            <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
                 <Ionicons name="add" size={20} color={Colors.textColor} />
             </TouchableOpacity>
         </CustomTabView>
@@ -152,7 +152,7 @@ const Taken = ({ ...navigation }) => (
         }
         <CustomTabView>
             <SubText>Night</SubText>
-            <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
                 <Ionicons name="add" size={20} color={Colors.textColor} />
             </TouchableOpacity>
         </CustomTabView>
@@ -171,7 +171,7 @@ const Missed = ({ ...navigation }) => (
     <View>
         <CustomTabView>
             <SubText>Morning</SubText>
-            <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
                 <Ionicons name="add" size={20} color={Colors.textColor} />
             </TouchableOpacity>
         </CustomTabView>
@@ -185,7 +185,7 @@ const Missed = ({ ...navigation }) => (
         }
         <CustomTabView>
             <SubText>Afternoon</SubText>
-            <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
                 <Ionicons name="add" size={20} color={Colors.textColor} />
             </TouchableOpacity>
         </CustomTabView>
@@ -199,7 +199,7 @@ const Missed = ({ ...navigation }) => (
         }
         <CustomTabView>
             <SubText>Night</SubText>
-            <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
                 <Ionicons name="add" size={20} color={Colors.textColor} />
             </TouchableOpacity>
         </CustomTabView>
@@ -218,17 +218,22 @@ const Missed = ({ ...navigation }) => (
 export default function ReminderScreen({ navigation })
 {
     const layout = useWindowDimensions();
-    const [date, setDate] = useState(new Date());
+    const params = navigation.state.params;
+    let date2 = new Date();
+    if(params && params.date) {
+        date2 = params.date;
+    }
+    const [date, setDate] = useState(date2);
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-    const [medications, setMedications] = useState(Medications);
+    const [medications, setMedications] = useState([]);
     const dateOptions = { weekday: 'short', year: '2-digit', month: 'long', day: 'numeric' };
     const onChange = (event, selectedDate) =>
     {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
         setDate(currentDate);
-        getData(currentDate);
+        navigation.date = currentDate;
     };
 
     const showMode = (currentMode) =>
@@ -241,26 +246,35 @@ export default function ReminderScreen({ navigation })
     {
         showMode('date');
     };
-    const getData = (date) =>
+    const getData = () =>
     {
         AsyncStorage.getItem(Medication.getKey(date))
-        .then((medications) => {
-            if (medications) {
-                setMedications(medications);
-                setRoutes(getRoutes());
+        .then((medicationsStr) => {
+            let medications;
+            if (medicationsStr) {
+                medications = JSON.parse(medicationsStr);
             } else {
-                setMedications([]);
-                setRoutes(getRoutes());
+                medications = [];
             }
+            console.log(medications);
+            setMedications(medications);
+            setRoutes(getRoutes(medications));
+            navigation.medications = medications;
         });
     };
-    const getRoutes = () => {
+    const getRoutes = medications => {
         return  [{ key: 'first', title: 'Taken(' + medications.filter(medication => medication.taken).length + ')' },
         { key: 'second', title: 'Missed(' + medications.filter(medication => !medication.taken).length + ')' }]
     }
+
+    useEffect(() => 
+        getData(),
+        [date]
+    )
     const [index, setIndex] = useState(0);
     const [routes, setRoutes] = useState(getRoutes(medications));
     navigation.medications = medications;
+    navigation.date = date;
     const renderScene = SceneMap({
         
         first: () => <Taken {...navigation} />,
@@ -279,7 +293,7 @@ export default function ReminderScreen({ navigation })
             </View>
         )
     }
-
+    
     return (
         <Page>
             <DateView>
