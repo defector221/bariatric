@@ -5,11 +5,11 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 export default function Home({ navigation }) {
 
   const register = () => {
-    navigation.navigate('Register')
+    navigation.navigate('RegisterWithEmail')
   }
 
   const login = () => {
-    navigation.navigate('DashboardScreen')
+    navigation.navigate('Login')
   }
   return (
       <LinearGradient colors={['#f5f5f5','#f5faf9','#f0faf9','#a7dbd7']} style={styles.contentContainer}>

@@ -6,12 +6,15 @@ import Corousel from '../components/Corousel';
 import {dummyData} from '../data/dummyData'
 
 export default function Home({navigation}) {
+  
   const register=()=>{
-    navigation.navigate('Register')
+    navigation.navigate('RegisterWithEmail')
   }
+
   const login=()=>{
-  navigation.navigate('DashboardScreen')
+     navigation.navigate('Login')
   }
+
   return (
     <ScrollView>
       <StatusBar translucent backgroundColor="transparent"/>
