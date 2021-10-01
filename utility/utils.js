@@ -1,6 +1,18 @@
 import { AsyncStorage } from 'react-native';
 
 export default Utils =  {
+    isLoggedIn: async function(callback) {
+        const loginResStr = await AsyncStorage.getItem('LOGIN::USER::RES'); 
+        callback && callback(!!loginResStr);
+        return !!loginResStr;
+    },
+
+    doLogout: async function(callback) {
+        await AsyncStorage.removeItem('LOGIN::USER::RES');
+        callback && callback(true);
+        return true;
+    },
+
     doLogin: function(email, password, callback){
         const data = {
             email, password
@@ -14,9 +26,12 @@ export default Utils =  {
             },
             body: JSON.stringify(data)
         }).then(res => res.json()).then(json => {
-            AsyncStorage.setItem('LOGIN::USER::RES', JSON.stringify(json))
+            if(json.status >=400) {
+                throw json;
+            }
+            AsyncStorage.setItem('LOGIN::USER::RES', JSON.stringify(json.data.token))
             .then(() => {
-                callback && callback({status: 200})
+                callback && callback(json)
             });
         }).catch(res => {
             callback && callback(res)
@@ -41,10 +56,11 @@ export default Utils =  {
         });
     },
 
-    getMyProfile: function(callback){
-        const loginRes = await AsyncStorage.getItem('@LOGIN::USER::RES'); 
+    getMyProfile: async function(callback){
+        const loginResStr = await AsyncStorage.getItem('LOGIN::USER::RES'); 
+        console.log(loginResStr);
+        const loginRes = JSON.parse(loginResStr);
         const token  = loginRes.token;
-
         fetch(`https://kalendars.io/api/v1/users/me`, {
             method: 'GET',
             headers: {
@@ -53,10 +69,8 @@ export default Utils =  {
                 Authorization: `Bearer ${token}`
             }
         }).then(res => res.json()).then(json => {
-            AsyncStorage.setItem('LOGIN::USER::RES', JSON.stringify(json))
-            .then(() => {
-                callback && callback({status: 200})
-            });
+            console.log(json);
+            callback && callback(json.user)
         }).catch(res => {
             callback && callback(res)
         });

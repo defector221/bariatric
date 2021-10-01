@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { StyleSheet, SafeAreaView, StatusBar, Text, Alert, Dimensions, TouchableOpacity, View, FlatList,Image } from 'react-native'
 import {LinearGradient} from 'expo-linear-gradient';
+import User from '../models/User';
+import Utils from '../utility/utils';
 
 
 
@@ -23,11 +25,34 @@ class DrawerMenu extends React.Component {
     constructor(props) {
         super(props)
         this.navigateToScreen = this.navigateToScreen.bind(this);
+        const dummyUser = new User(
+            Date.now(),
+            '',
+            '',
+            '',
+            '',
+            ''
+          );
+        this.state = {
+            user: dummyUser
+        }
     }
 
-
+    componentDidMount() {
+            Utils.getMyProfile(res => {
+              const newUser = new User(
+                res.id,
+                res.phone_number,
+                res.email_id,
+                res.user_name,
+                res.first_name,
+                res.last_name
+              );
+              this.setState({user: newUser});
+            });
+    }
     render() {
-
+        const {user} = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <StatusBar backgroundColor="#FAFAFA" barStyle="light-content" />
@@ -37,8 +62,8 @@ class DrawerMenu extends React.Component {
                             <Image source={require('../assets/user.png')}/>
                         </TouchableOpacity>
                     </View>
-                    <Text style={{ color: 'black', fontSize: 20, fontWeight: '500', paddingLeft: 10 }}>Jane Doe</Text>
-                    <Text style={{ color: 'black', fontSize: 18, fontWeight: '500', paddingLeft: 10 }}>+91 8378764190</Text>
+                    <Text style={{ color: 'black', fontSize: 20, fontWeight: '500', paddingLeft: 10 }}>{user.name}</Text>
+                    <Text style={{ color: 'black', fontSize: 18, fontWeight: '500', paddingLeft: 10 }}>{user.phone}</Text>
                  </LinearGradient>
                 <View style={styles.menuContainer}>
                     {this.renderFlatList()}

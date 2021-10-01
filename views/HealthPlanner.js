@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Linking } from 'react-native';
 import styled from 'styled-components';
 
 import Page from '../components/Page';
@@ -112,12 +112,15 @@ export default function HealthPlanner({ navigation }) {
            <CardItem
             color="#FAFAFA"
             height="217px"
+            onSelect={async () => {
+                await Linking.openURL('https://youtu.be/Oqf5o2OW3XM');
+            }}
             >   
              <CardItem  
              color="#E0E0E0"
              height="68px"
             >
-
+                <Text>Video</Text>
              </CardItem>
             <Text style={{fontSize:12,fontWeight:'bold',paddingHorizontal:10}}>
             Fun Activities to do at home

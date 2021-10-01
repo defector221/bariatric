@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {LinearGradient} from 'expo-linear-gradient';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import Utils from '../utility/utils';
 
 export default function Home({ navigation }) {
 
@@ -11,6 +12,14 @@ export default function Home({ navigation }) {
   const login = () => {
     navigation.navigate('Login')
   }
+  useEffect(() => {
+    Utils.isLoggedIn((isLoggedIn) => {
+      console.log(isLoggedIn);
+      if(isLoggedIn) {
+        navigation.navigate('DashboardScreen');
+      }
+    })
+  }, [])
   return (
       <LinearGradient colors={['#f5f5f5','#f5faf9','#f0faf9','#a7dbd7']} style={styles.contentContainer}>
       <View style={styles.headView}>

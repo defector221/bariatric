@@ -12,10 +12,11 @@ export default function Login({navigation}) {
   const [password,onChangePassword]=useState("");
   const login = () => { 
     Utils.doLogin(text, password, function(res){
+      console.log(res);
       if(res.status == 200){
         navigation.navigate('DashboardScreen')
       }else{
-        Alert.alert("Login", res.message);
+        Alert.alert("Login", res.error);
       }
     })
   }
@@ -49,6 +50,7 @@ export default function Login({navigation}) {
           placeholder="Password"
           onChangeText={onChangePassword}
           value={password}
+          secureTextEntry={true}
           underlineColorAndroid="transparent"
         />
         <Icon style={styles.icon} name="arrowright" size={20} color="#000" />
@@ -56,7 +58,7 @@ export default function Login({navigation}) {
        
       <TouchableOpacity onPress={()=> login()}>
         <View style={styles.customBtn}>
-        <Text style={{ color: 'black' }}>Next</Text>
+        <Text style={{ color: 'black' }}>Login</Text>
         </View>
       </TouchableOpacity>
     </ScrollView>
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
   loginText:{
      display:'flex',
      color:'black',
-     width:79,
+     width:100,
      height:66,
      marginHorizontal:149,
      marginBottom:20,

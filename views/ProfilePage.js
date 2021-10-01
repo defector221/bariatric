@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from '@expo/vector-icons';
+import Utils from '../utility/utils';
 
 
 
@@ -17,6 +18,7 @@ import HeaderButton from '../components/HeaderButton';
 import CardItem from '../components/CardItem';
 import Page from '../components/Page';
 import styled from 'styled-components';
+import User from '../models/User';
 
 const ProfilePage = props => {
 
@@ -44,7 +46,30 @@ const ProfilePage = props => {
   font-size: 18px;
   line-height: 22px;
   color: #000000;
-  `
+  `;
+  const dummyUser = new User(
+    Date.now(),
+    '',
+    '',
+    '',
+    '',
+    ''
+  );
+  const [user, setUser] = useState(dummyUser);
+  
+  useEffect(() => {
+    Utils.getMyProfile(res => {
+      const newUser = new User(
+        res.id,
+        res.phone_number,
+        res.email_id,
+        res.user_name,
+        res.first_name,
+        res.last_name
+      );
+      setUser(newUser);
+    });
+  }, [])
   return (
     <Page>
       <CardItem
@@ -54,8 +79,8 @@ const ProfilePage = props => {
        <FlexItem>
        <Image source={require('../assets/user.png')}/>
         <TextFlex>
-          <UserText>Jane Doe</UserText>
-          <PhoneText>+91 8378764190</PhoneText>
+          <UserText>{user.name}</UserText>
+          <PhoneText>{user.phone}</PhoneText>
         </TextFlex>
        </FlexItem>  
       
@@ -100,7 +125,11 @@ const ProfilePage = props => {
         </FlexItem>
 
       </CardItem>
-      <TouchableOpacity onPress={() => console.log('Logout')}>
+      <TouchableOpacity onPress={() => {
+        Utils.doLogout(() => {
+          props.navigation.navigate('Login');
+        })
+      }}>
           <View style={styles.customBtn}>
               <Text style={{ color: 'black' }}>Logout</Text>
           </View>
