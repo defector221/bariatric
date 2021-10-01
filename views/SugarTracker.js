@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, useWindowDimensions, Dimensions, Image,TextInput,TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import styled from 'styled-components';
@@ -9,6 +9,9 @@ import HeaderButton from '../components/HeaderButton';
 import Colors from '../constants/Colors';
 import Page from '../components/Page';
 import CardItem from '../components/CardItem';
+import { Sugar } from '../models/Sugar';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { AsyncStorage } from 'react-native';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -43,15 +46,13 @@ color: ${Colors.textColor};
 text-align:center;
 padding-vertical:5px
 `
-const BoldText = styled.TextInput`
+const BoldText = styled.Text`
 font-style: normal;
 font-weight: bold;
-font-size: 20px;
-line-height: 20px;
+font-size: 25px;
+line-height: 26px;
 letter-spacing: 0.5px;
 color: ${Colors.textColor};
-text-align:center;
-padding-vertical:5px
 `
     const DateView = styled.View`
 display:flex;
@@ -96,12 +97,75 @@ const WrapView = styled.View`
   justify-content:space-between;
   margin:5%
   `
- 
+  const params = navigation.state.params;
+    let date2 = new Date();
+    if(params && params.date) {
+        date2 = params.date;
+    }
+    const [date, setDate] = useState(date2);
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const [sugar, setSugar] = useState( 0 );
+    const dateOptions = { weekday: 'short', year: '2-digit', month: 'long', day: 'numeric' };
+    const onChange = (event, selectedDate) =>
+    {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        navigation.date = currentDate;
+    };
 
+    const showMode = (currentMode) =>
+    {
+        setShow(true);
+        setMode(currentMode);
+    };
+
+    const showDatepicker = () =>
+    {
+        showMode('date');
+    };
+    const getData = () =>
+    {
+        AsyncStorage.getItem(Sugar.getKey(date))
+        .then((sugarStr) => {
+            if (sugarStr) {
+                const obj = JSON.parse(sugarStr);
+                setSugar(obj.sugar ? obj.sugar : 0);
+                sugarInputStr = obj.sugar.toString();
+                navigation.sugar = obj.sugar;
+            } else {
+                setSugar(0);
+            }
+            
+        });
+    };
+    const onSubmit = () =>
+    {
+        const key = Sugar.getKey(date);
+        const obj = new Sugar(Date.now(), date, parseInt(sugarInputStr));
+        console.log(obj);
+        AsyncStorage.setItem(key, JSON.stringify(obj))
+        .then(() => {
+            console.log('saved');
+        })
+    };
+    let sugarInputStr = '142';
+    useEffect(() => getData(), [date]);
     return (
         <Page>
             <DateView>
-                <BoldText>20 April 2021, Tuesday</BoldText>
+                <BoldText onPress={showDatepicker}>{date.toLocaleDateString("en-US", dateOptions)}</BoldText>
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChange}
+                    />
+                )}
             </DateView>
             <CardItem
                 color='#97999B'
@@ -124,12 +188,16 @@ const WrapView = styled.View`
             >
                 <WrapView>
                     <Image source={require('../assets/diabetes.png')} />
-                    <BoldText1>142.0</BoldText1>
+                    <BoldText1 
+                        onChangeText={text=> {sugarInputStr = text;}}
+                        keyboardType="numeric"
+                    >
+                        {sugar.toString()}</BoldText1>
                     <SubText>mg/DL</SubText>
                 </WrapView>
 
             </CardItem>
-            <TouchableOpacity onPress={() => console.log('Submit')}>
+            <TouchableOpacity onPress={onSubmit}>
              <View style={styles.customBtn}>
                  <Text style={{ color: 'black' }}>Save</Text>
              </View>

@@ -20,7 +20,8 @@ export class Medication {
         time,
         beforeOrAfterFood,
         duration, // in days
-        taken // boolean
+        taken, // boolean
+        date
     ){
         this.id = id;
         this.name = name;
@@ -30,6 +31,7 @@ export class Medication {
         this.beforeOrAfterFood = beforeOrAfterFood;
         this.duration = duration;
         this.taken = taken;
+        this.date = date;
     }
 }
 
