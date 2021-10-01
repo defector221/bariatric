@@ -216,7 +216,7 @@ const MenuScreen = props => {
      {/* Chart View */}
      <CardItem
         color='#FFFFFF'
-        height='237'>
+        height='237px'>
        <LineChart
         data={data}
         width={screenWidth-100}

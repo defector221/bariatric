@@ -1,28 +1,60 @@
-import React ,{useState}from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button, TextInput, } from 'react-native';
 import { Formik } from 'formik';
+import { Picker } from '@react-native-picker/picker';
 import styled from 'styled-components'
 
 import CardItem from '../components/CardItem';
 import IconImage from '../components/IconImage';
 import Page from '../components/Page';
+import Medication, { BEFORE_OR_AFTER_FOOD, TIME_OF_DAY } from '../models/Medication';
+import { AsyncStorage } from 'react-native';
 
-export default function AddReminder({ navigation }) {
-    const [tablet,setTablet]=useState(true);
-    const [injection,setInjection]=useState(false);
-    const [syrup,setSyrup]=useState(false);
-    const [pill,setPill]=useState(false);
-    const [butter,setButter]=useState(false);
-  
-    const setActive=(user)=>{
-      if(user === "male"){
-        setMale(true)
-        setFemale(false)
-      }else if(user=== "female"){
-        setFemale(true)
-        setMale(false)
-      }
+export default function AddReminder({ navigation })
+{
+    const [tablet, setTablet] = useState(true);
+    const [injection, setInjection] = useState(false);
+    const [syrup, setSyrup] = useState(false);
+    const [pill, setPill] = useState(false);
+    const [butter, setButter] = useState(false);
+    const params = navigation.state.params;
+    let date2 = new Date();
+    if(params && params.date) {
+        date2 = params.date;
     }
+    const [date] = useState(date2);
+    
+    const setActive = (user) =>
+    {
+        if (user === "male")
+        {
+            setMale(true)
+            setFemale(false)
+        } else if (user === "female")
+        {
+            setFemale(true)
+            setMale(false)
+        }
+    }
+
+    const onSubmit = () =>
+    {
+        const key = Medication.getKey(date);
+        AsyncStorage.getItem(key)
+        .then((medicationsStr) => {
+            let medications;
+            if (medicationsStr) {
+                medications = JSON.parse(medicationsStr);
+                medications.push(formMed);
+            } else {
+                medications = [formMed];
+            }
+            AsyncStorage.setItem(key, JSON.stringify(medications))
+            .then(() => {
+                navigation.navigate('ReminderScreen', {date});
+            })
+        });
+    };
 
     const ColView = styled.View`
     display:flex;
@@ -37,7 +69,17 @@ export default function AddReminder({ navigation }) {
     padding:10px
     margin:10px
     `
-
+    const formMed = new Medication(
+        Date.now(),
+        'Paracetamol',
+        TIME_OF_DAY.MORNING,
+        '1 tablet',
+        '9:00 am',
+        BEFORE_OR_AFTER_FOOD.BEFORE_FOOD,
+        '5 days',
+        false,
+        date
+    );
     return (
         <Page>
             <CardItem color='#FAFAFA'
@@ -62,72 +104,86 @@ export default function AddReminder({ navigation }) {
 
                 </View>
                 <Formik
-                    initialValues={{ email: '' }}
-                    onSubmit={values => console.log(values)}
+                    initialValues={{ 
+                        medicine: new Medication(
+                            Date.now(),
+                            'Paracetamol',
+                            TIME_OF_DAY.MORNING,
+                            '1 tablet',
+                            '9:00 am',
+                            BEFORE_OR_AFTER_FOOD.BEFORE_FOOD,
+                            '5 days',
+                            false
+                        ) 
+                    }}
+                    onSubmit={onSubmit}
                 >
-                    {({ handleChange, handleBlur, handleSubmit, values }) => (
+                    {({ handleSubmit, values }) => (
                         <View>
                             <CustomInput
-                                onChangeText={handleChange('email')}
-                                onBlur={handleBlur('email')}
-                                value={values.email}
+                                onChangeText={text => {
+                                    formMed.name = text;
+                                }}
+                                defaultValue={formMed.name}
                                 placeholder="Medicine Name"
                             />
                             <ColView>
                                 <CustomInput
-                                    onChangeText={() => handleChange('email')}
-                                    onBlur={() => handleBlur('email')}
-                                    value={values.email}
-                                    keyboardType="numeric"
+                                    onChangeText={text => {
+                                        formMed.duration = text;
+                                    }}
                                     placeholder="Days"
+                                    defaultValue={formMed.duration}
                                     style={{ width: 142 }}
                                 />
                                 <CustomInput
-                                    onChangeText={() => handleChange('email')}
-                                    onBlur={() => handleBlur('email')}
-                                    value={values.email}
-                                    keyboardType="numeric"
-                                    placeholder="Dose"
-                                    style={{ width: 142 }}
-                                />
-                            </ColView>
-                            <ColView>
-                                <CustomInput
-                                    onChangeText={() => handleChange('email')}
-                                    onBlur={() => handleBlur('email')}
-                                    value={values.email}
-                                    keyboardType="numeric"
+                                    onChangeText={text => {
+                                        formMed.time = text;
+                                    }}
                                     placeholder="Time"
+                                    defaultValue={formMed.time}
                                     style={{ width: 142 }}
                                 />
-                                <CustomInput
-                                    onChangeText={() => handleChange('email')}
-                                    onBlur={() => handleBlur('email')}
-                                    value={values.email}
-                                    keyboardType="numeric"
-                                    placeholder="Food Time"
-                                    style={{ width: 142 }}
-                                />
+
                             </ColView>
                             <ColView>
                                 <CustomInput
-                                    onChangeText={() => handleChange('email')}
-                                    onBlur={() => handleBlur('email')}
-                                    value={values.email}
-                                    keyboardType="numeric"
-                                    placeholder="Alarm"
-                                    style={{ width: 142 }}
-                                />
-                                <CustomInput
-                                    onChangeText={() => handleChange('email')}
-                                    onBlur={() => handleBlur('email')}
-                                    value={values.email}
-                                    keyboardType="numeric"
-                                    placeholder="Snooze"
+                                    onChangeText={text => {
+                                        formMed.quantity = text;
+                                    }}
+                                    placeholder="Dose"
+                                    defaultValue={formMed.quantity}
                                     style={{ width: 142 }}
                                 />
                             </ColView>
-                            <TouchableOpacity onPress={() => console.log('Save data')}>
+                            <Picker
+                                // passing value directly from formik
+                                selectedValue={formMed.timeOfDay}
+                                // changing value in formik
+                                onValueChange={itemValue => {
+                                    formMed.timeOfDay = itemValue;
+                                }}
+                                style={{ marginTop: 20 }}
+                            >
+                                <Picker.Item label='Morning' value={TIME_OF_DAY.MORNING} key={'MORNING'} />
+                                <Picker.Item label='Afternoon' value={TIME_OF_DAY.AFTER_NOON} key={'AFTER_NOON'} />
+                                <Picker.Item label='Night' value={TIME_OF_DAY.NIGHT} key={'NIGHT'} />
+                            </Picker>
+                            <Picker
+                                // passing value directly from formik
+                                selectedValue={formMed.beforeOrAfterFood}
+                                // changing value in formik
+                                onValueChange={itemValue => {
+                                    {
+                                        formMed.beforeOrAfterFood = itemValue;
+                                    }
+                                }}
+                                style={{ marginTop: 20 }}
+                            >
+                                <Picker.Item label='Before Food' value={BEFORE_OR_AFTER_FOOD.BEFORE_FOOD} key={'BEFORE_FOOD'} />
+                                <Picker.Item label='After Food' value={BEFORE_OR_AFTER_FOOD.AFTER_FOOD} key={'AFTER_FOOD'} />
+                            </Picker>
+                            <TouchableOpacity onPress={handleSubmit}>
                                 <View style={styles.customBtn}>
                                     <Text style={{ color: 'black' }}>Save</Text>
                                 </View>

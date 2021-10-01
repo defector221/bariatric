@@ -1,13 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, useWindowDimensions, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { AsyncStorage } from 'react-native';
+
 import styled from 'styled-components';
 
 
 import Colors from '../constants/Colors';
 import Page from '../components/Page';
 import CardItem from '../components/CardItem';
+import { TIME_OF_DAY, Medication} from '../models/Medication';
 
 const AddButtonView = styled.View`
 display:flex;
@@ -64,229 +68,273 @@ line-height: 22px;
 color: #262323;
 margin-left:5%
 `
-const WrapText=styled.Text`
+const WrapText = styled.Text`
 color: #505050;
 margin-left:5%
 width:240px
 `
+const getMorningCard = (medication) => (
+    <CardItem key={medication.id}
+        color='#DBF6E9'
+        height='110px'
+    >
+        <View style={{ flex: 3, flexDirection: 'row' }}>
+            <Image source={require('../assets/tablet.png')} />
+            <WrapText style={{ height: 500, width: 270 }}>
+                <HeadText style={{ flexWrap: 'wrap' }}>{medication.name}</HeadText>
+                {"\n"}
+                <Text>
+                    ({medication.duration}) {medication.quantity}
+                </Text>
+            </WrapText>
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'baseline', marginLeft: 5, marginTop: 20, justifyContent: 'space-between' }}>
+            <Text>({medication.beforeOrAfterFood})</Text>
+            <TimeText>{medication.time}</TimeText>
+        </View>
 
-const Taken = ({...navigation}) => (
-  <View>
-    <CustomTabView>
-      <SubText>Morning</SubText>
-      <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
-      <Ionicons name="add" size={20} color={Colors.textColor} />
-      </TouchableOpacity>
-    </CustomTabView>
-    <CardItem
-      color='#DBF6E9'
-      height='82px'
-    >
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Image source={require('../assets/tablet.png')}/>
-      <WrapText style={{height:200}}>
-       <HeadText style={{flexWrap:'wrap'}}>Bupropion-naltrexone(Contrave)</HeadText>
-       <Text>
-         (5 days) 1 Tablet
-       </Text>
-      </WrapText>  
-      </View>
-      <View style={{ flex: 1, flexDirection: 'row',alignItems:'baseline',marginLeft:60,marginTop:20 ,justifyContent:'space-between'}}>
-        <Text>(Before food)</Text>
-        <TimeText>9:00 am</TimeText>
-      </View>
     </CardItem>
-    <CardItem
-      color='#DBF6E9'
-      height='82px'
-    >
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Image source={require('../assets/tablet.png')}/>
-      <WrapText style={{height:200}}>
-       <HeadText style={{flexWrap:'wrap'}}>Bupropion-naltrexone(Contrave)</HeadText>
-       <Text>
-         (5 days) 1 Tablet
-       </Text>
-      </WrapText>  
-      </View>
-      <View style={{ flex: 1, flexDirection: 'row',alignItems:'baseline',marginLeft:60,marginTop:20 ,justifyContent:'space-between'}}>
-        <Text>(Before food)</Text>
-        <TimeText>9:00 am</TimeText>
-      </View>
-    </CardItem>
-    <CustomTabView>
-      <SubText>Night</SubText>
-      <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
-      <Ionicons name="add" size={20} color={Colors.textColor} />
-      </TouchableOpacity>
-    </CustomTabView>
-    <CardItem
-      color='#FAFAFA'
-      height='82px'
-    >
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Image source={require('../assets/tablet.png')}/>
-      <WrapText style={{height:200}}>
-       <HeadText style={{flexWrap:'wrap'}}>Bupropion-naltrexone(Contrave)</HeadText>
-       <Text>
-         (5 days) 1 Tablet
-       </Text>
-      </WrapText>  
-      </View>
-      <View style={{ flex: 1, flexDirection: 'row',alignItems:'baseline',marginLeft:60,marginTop:20 ,justifyContent:'space-between'}}>
-        <Text>(Before food)</Text>
-        <TimeText>9:00 am</TimeText>
-      </View>
-    </CardItem>
-    <CardItem
-      color='#FAFAFA'
-      height='82px'
-    >
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Image source={require('../assets/tablet.png')}/>
-      <WrapText style={{height:200}}>
-       <HeadText style={{flexWrap:'wrap'}}>Bupropion-naltrexone(Contrave)</HeadText>
-       <Text>
-         (5 days) 1 Tablet
-       </Text>
-      </WrapText>  
-      </View>
-      <View style={{ flex: 1, flexDirection: 'row',alignItems:'baseline',marginLeft:60,marginTop:20 ,justifyContent:'space-between'}}>
-        <Text>(Before food)</Text>
-        <TimeText>9:00 am</TimeText>
-      </View>
-    </CardItem>
-  </View>
 );
 
-const Missed = ({...navigation}) => (
-  <View>
-    <CustomTabView>
-      <SubText>Morning</SubText>
-      <TouchableOpacity onPress={() => navigation.navigate('AddReminder')}>
-      <Ionicons name="add" size={20} color={Colors.textColor} />
-      </TouchableOpacity>
-    </CustomTabView>
-    <CardItem
-      color='#DBF6E9'
-      height='82px'
+const getNightCard = (medication) => (
+    <CardItem key={medication.id}
+        color='#FAFAFA'
+        height='110px'
     >
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Image source={require('../assets/tablet.png')}/>
-      <WrapText style={{height:200}}>
-       <HeadText style={{flexWrap:'wrap'}}>Bupropion-naltrexone(Contrave)</HeadText>
-       <Text>
-         (5 days) 1 Tablet
-       </Text>
-      </WrapText>  
-      </View>
-      <View style={{ flex: 1, flexDirection: 'row',alignItems:'baseline',marginLeft:60,marginTop:20 ,justifyContent:'space-between'}}>
-        <Text>(Before food)</Text>
-        <TimeText>9:00 am</TimeText>
-      </View>
+        <View style={{ flex: 3, flexDirection: 'row' }}>
+            <Image source={require('../assets/tablet.png')} />
+            <WrapText style={{ height: 500, width: 270 }}>
+                <HeadText style={{ flexWrap: 'wrap' }}>{medication.name}</HeadText>
+                {"\n"}
+                <Text>
+                    ({medication.duration}) {medication.quantity}
+                </Text>
+            </WrapText>
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'baseline', marginLeft: 5, marginTop: 20, justifyContent: 'space-between' }}>
+            <Text>({medication.beforeOrAfterFood})</Text>
+            <TimeText>{medication.time}</TimeText>
+        </View>
 
     </CardItem>
-    <CardItem
-      color='#DBF6E9'
-      height='82px'
-    >
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Image source={require('../assets/tablet.png')}/>
-      <WrapText style={{height:200}}>
-       <HeadText style={{flexWrap:'wrap'}}>Bupropion-naltrexone(Contrave)</HeadText>
-       <Text>
-         (5 days) 1 Tablet
-       </Text>
-      </WrapText>  
-      </View>
-      <View style={{ flex: 1, flexDirection: 'row',alignItems:'baseline',marginLeft:60,marginTop:20 ,justifyContent:'space-between'}}>
-        <Text>(Before food)</Text>
-        <TimeText>9:00 am</TimeText>
-      </View>
-    </CardItem>
-  </View>
 );
 
-export default function ReminderScreen({ navigation }) {
-  const layout = useWindowDimensions();
+const Taken = ({ ...navigation }) => (
+    <View>
+        <CustomTabView>
+            <SubText>Morning</SubText>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
+                <Ionicons name="add" size={20} color={Colors.textColor} />
+            </TouchableOpacity>
+        </CustomTabView>
+        {
+            navigation.medications
+                .filter(medication => medication.taken && medication.timeOfDay === TIME_OF_DAY.MORNING)
+                .map((medication) =>
+                (
+                    getMorningCard(medication)
+                ))
+        }
+        <CustomTabView>
+            <SubText>Afternoon</SubText>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
+                <Ionicons name="add" size={20} color={Colors.textColor} />
+            </TouchableOpacity>
+        </CustomTabView>
+        {
+            navigation.medications
+                .filter(medication => medication.taken && medication.timeOfDay === TIME_OF_DAY.AFTER_NOON)
+                .map((medication) =>
+                (
+                    getNightCard(medication)
+                ))
+        }
+        <CustomTabView>
+            <SubText>Night</SubText>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
+                <Ionicons name="add" size={20} color={Colors.textColor} />
+            </TouchableOpacity>
+        </CustomTabView>
+        {
+            navigation.medications
+                .filter(medication => medication.taken && medication.timeOfDay === TIME_OF_DAY.NIGHT)
+                .map((medication) =>
+                (
+                    getNightCard(medication)
+                ))
+        }
+    </View>
+);
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'first', title: 'Taken(3)' },
-    { key: 'second', title: 'Missed(2)' },
-  ]);
+const Missed = ({ ...navigation }) => (
+    <View>
+        <CustomTabView>
+            <SubText>Morning</SubText>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
+                <Ionicons name="add" size={20} color={Colors.textColor} />
+            </TouchableOpacity>
+        </CustomTabView>
+        {
+            navigation.medications
+                .filter(medication => !medication.taken && medication.timeOfDay === TIME_OF_DAY.MORNING)
+                .map((medication) =>
+                (
+                    getMorningCard(medication)
+                ))
+        }
+        <CustomTabView>
+            <SubText>Afternoon</SubText>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
+                <Ionicons name="add" size={20} color={Colors.textColor} />
+            </TouchableOpacity>
+        </CustomTabView>
+        {
+            navigation.medications
+                .filter(medication => !medication.taken && medication.timeOfDay === TIME_OF_DAY.AFTER_NOON)
+                .map((medication) =>
+                (
+                    getNightCard(medication)
+                ))
+        }
+        <CustomTabView>
+            <SubText>Night</SubText>
+            <TouchableOpacity onPress={() => navigation.navigate('AddReminder', {date: navigation.date})}>
+                <Ionicons name="add" size={20} color={Colors.textColor} />
+            </TouchableOpacity>
+        </CustomTabView>
+        {
+            navigation.medications
+                .filter(medication => !medication.taken && medication.timeOfDay === TIME_OF_DAY.NIGHT)
+                .map((medication) =>
+                (
+                    getNightCard(medication)
+                ))
+        }
+    </View>
+);
 
-  const renderScene = SceneMap({
-    first: ()=><Taken {...navigation}/>,
-    second:()=> <Missed {...navigation}/>,
-  });
 
-  const renderLabel = ({ route, focused, color }) => {
-    return (
-      <View>
-        <Text
-          style={[focused ? styles.activeTabTextColor : styles.tabTextColor]}
-        >
-          {route.title}
-        </Text>
-      </View>
+export default function ReminderScreen({ navigation })
+{
+    const layout = useWindowDimensions();
+    const params = navigation.state.params;
+    const [date, setDate] = useState(new Date());
+    let date2 = new Date();
+    if(params && params.date) {
+        date2 = new Date(params.date);
+        delete navigation.state.params.date;
+        setDate(date2);
+    }
+    
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const [medications, setMedications] = useState([]);
+    const dateOptions = { weekday: 'short', year: '2-digit', month: 'long', day: 'numeric' };
+    const onChange = (event, selectedDate) =>
+    {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        navigation.date = currentDate;
+    };
+
+    const showMode = (currentMode) =>
+    {
+        setShow(true);
+        setMode(currentMode);
+    };
+
+    const showDatepicker = () =>
+    {
+        showMode('date');
+    };
+    const getData = () =>
+    {
+        AsyncStorage.getItem(Medication.getKey(date))
+        .then((medicationsStr) => {
+            let medications;
+            if (medicationsStr) {
+                medications = JSON.parse(medicationsStr);
+            } else {
+                medications = [];
+            }
+            setMedications(medications);
+            setRoutes(getRoutes(medications));
+            navigation.medications = medications;
+        });
+    };
+    const getRoutes = medications => {
+        return  [{ key: 'first', title: 'Taken(' + medications.filter(medication => medication.taken).length + ')' },
+        { key: 'second', title: 'Missed(' + medications.filter(medication => !medication.taken).length + ')' }]
+    }
+
+    useEffect(() => 
+        getData(),
+        [date]
     )
-  }
+    const [index, setIndex] = useState(0);
+    const [routes, setRoutes] = useState(getRoutes(medications));
+    navigation.medications = medications;
+    navigation.date = date;
+    const renderScene = SceneMap({
+        
+        first: () => <Taken {...navigation} />,
+        second: () => <Missed {...navigation} />,
+    });
 
-  return (
-    <Page>
-      <DateView>
-        <BoldText>Tue, April 20</BoldText>
-        <Image source={require('../assets/calenderIcon.png')} />
-      </DateView>
+    const renderLabel = ({ route, focused, color }) =>
+    {
+        return (
+            <View>
+                <Text
+                    style={[focused ? styles.activeTabTextColor : styles.tabTextColor]}
+                >
+                    {route.title}
+                </Text>
+            </View>
+        )
+    }
+    
+    return (
+        <Page>
+            <DateView>
+                <BoldText onPress={showDatepicker}>{date.toLocaleDateString("en-US", dateOptions)}</BoldText>
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChange}
+                    />
+                )}
+            </DateView>
 
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={layout}
-        renderTabBar={props => <TabBar
-          {...props}
-          renderLabel={renderLabel}
-          indicatorStyle={{ backgroundColor: Colors.textColor }}
-          style={{
-            backgroundColor: Colors.greyColor,
-          }}
-        />}
-      />
-    </Page>
-  );
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={layout}
+                renderTabBar={props => <TabBar
+                    {...props}
+                    renderLabel={renderLabel}
+                    indicatorStyle={{ backgroundColor: Colors.textColor }}
+                    style={{
+                        backgroundColor: Colors.greyColor,
+                    }}
+                />}
+            />
+        </Page>
+    );
 }
 
-// Header Navigation
-// ReminderScreen.navigationOptions = ({ navigation }) => {
-//   return {
-//     headerTitle: 'Reminder',
-//     headerLeft: () =>
-//       <HeaderButtons HeaderButtonComponent={HeaderButton}>
-//         <Item
-//           iconName="chevron-back-outline"
-//           onPress={() => {
-//             navigation.goBack();
-//           }}
-//         />
-//       </HeaderButtons>,
-//     headerRight: () =>
-//       <AddButtonView>
-//         {/* Add Reminder Screen */}
-//         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('AddReminder')}>
-//           <Ionicons name='add' size={26} color={Colors.textColor} />
-//         </TouchableOpacity >
-//       </AddButtonView>,
-
-//   };
-// }
 
 const styles = StyleSheet.create({
-  activeTabTextColor: {
-    color: 'black'
-  },
-  tabTextColor: {
-    color: 'black'
-  }
+    activeTabTextColor: {
+        color: 'black'
+    },
+    tabTextColor: {
+        color: 'black'
+    }
 })
