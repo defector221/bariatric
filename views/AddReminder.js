@@ -42,7 +42,6 @@ export default function AddReminder({ navigation })
         const key = Medication.getKey(date);
         AsyncStorage.getItem(key)
         .then((medicationsStr) => {
-            console.log(medicationsStr, formMed);
             let medications;
             if (medicationsStr) {
                 medications = JSON.parse(medicationsStr);

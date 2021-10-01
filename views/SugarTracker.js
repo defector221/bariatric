@@ -144,7 +144,6 @@ const WrapView = styled.View`
     {
         const key = Sugar.getKey(date);
         const obj = new Sugar(Date.now(), date, parseInt(sugarInputStr));
-        console.log(obj);
         AsyncStorage.setItem(key, JSON.stringify(obj))
         .then(() => {
             console.log('saved');
