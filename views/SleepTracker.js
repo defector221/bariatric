@@ -116,11 +116,10 @@ color: ${Colors.textColor};
                     borderRadius: 12,
                 }}>
                     <TouchableOpacity onPress={() => {
-                    navigation.navigate({
-                      routeName: 'Alarm',
-                      })}}
+                    navigation.navigate('Alarm')
+                }}
                     >
-                    <Text style={{ marginHorizontal: 20, marginVertical: 6, fontSize: 14, color: '#4FB6AD' }}>
+                    <Text style={{ marginHorizontal: 15, marginVertical: 6, fontSize: 14, color: '#4FB6AD' }}>
                         Change
                     </Text>
                     </TouchableOpacity>
