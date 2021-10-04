@@ -196,6 +196,13 @@ const DashboardStackNavigator =createStackNavigator({
   DashboardTabNavigator:{
     screen: DashboardTabNavigator,
   },
+  CameraScreen: {
+    screen: ImagePicker,
+    navigationOptions: {
+      title: 'Nutrition Tracker',
+      
+    }
+  },
   BMICalculator: {
     screen: BMICalculator,
     navigationOptions: {

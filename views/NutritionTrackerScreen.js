@@ -93,9 +93,19 @@ const NutritionTrackerScreen = props => {
   font-weight: bold;
   font-size: 16px;
   `
+  if(props.navigation.state.params && props.navigation.state.params.image && !props.navigation.state.params.set) {
+    console.log('TESTING------')
+    props.navigation.state.params.set = true;
+    setImage(props.navigation.state.params.image);
+  }
   useEffect(()=>{
     const url= props.navigation.state.params ? props.navigation.state.params.image : '';
     setImage(url);
+    if(props.navigation.state && props.navigation.state.params && props.navigation.state.params.set)
+    {
+      props.navigation.state.params.set = false;
+    }
+    
     if (props.navigation.state.params && props.navigation.state.params.imagedata && props.navigation.state.params.imagedata.success) {
       let receivedImageData = props.navigation.state.params.imagedata;
       console.log("image data", receivedImageData.item_ingredient);
@@ -108,7 +118,7 @@ const NutritionTrackerScreen = props => {
     } else {
       console.log("No Data");
     }
-  },[uri])
+  }, [uri])
 
   useEffect(()=>()=>{
     return () => {
@@ -130,14 +140,11 @@ const NutritionTrackerScreen = props => {
       }
       <Page>
         <HeaderView>
-          {/* <DetailsView>
-            <Foundation name="calendar" size={22} color="#4FB6AD" style={{ padding: 6 }} />
-            <DetailsText style={{ padding: 6 }}>Today</DetailsText>
-            
-            <Ionicons name="md-chevron-down-outline" size={22} color="#4FB6AD" style={{ padding: 6 }} />
-          </DetailsView> */}
           <TouchableOpacity onPress={openImagePickerAsync}>
             <AntDesign name="upload" size={22} color="#0A0E0D" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => props.navigation.navigate('CameraScreen')}>
+            <Ionicons name="camera" size={25} color="#0A0E0D" />
           </TouchableOpacity>
         </HeaderView>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>

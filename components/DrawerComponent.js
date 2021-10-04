@@ -99,7 +99,14 @@ class DrawerMenu extends React.Component {
 
     navigateToScreen(navScreen) {
         console.log('Nav Screen', navScreen)
-        this.props.navigation.navigate(navScreen)
+        if(navScreen === 'DashboardScreen') {
+            console.log('Test');
+            this.props.navigation.navigate('DashboardScreen');
+        }
+        else
+        {
+            this.props.navigation.navigate(navScreen)
+        }
     }
 }
 

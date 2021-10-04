@@ -96,8 +96,8 @@ const CameraScreen = props => {
           }
         );
         let responseJson = await response.json();
-        console.log('Google response', responseJson);
-        console.log("response from first", responseJson.responses[0].localizedObjectAnnotations[0].name);
+        // console.log('Google response', responseJson);
+        // console.log("response from first", responseJson.responses[0].localizedObjectAnnotations[0].name);
         const glable = responseJson.responses[0].localizedObjectAnnotations[0].name;
         // this.setState({
         //   googleResponse: responseJson,
@@ -159,8 +159,9 @@ const CameraScreen = props => {
         fetch("https://sagarinc.com/Pressbro/SmartNutrition/admin/index.php/SearchItem", requestOptions)
           .then(response => response.text())
           .then(result => {
-            console.log("result", result.substr(result.indexOf("{\"")));
+            // console.log("result", result.substr(result.indexOf("{\"")));
             let parseddata = JSON.parse(result.substr(result.indexOf("{\"")));
+            console.log(image.uri)
             props.navigation.navigate('NutritionTrackerScreen', { image: image.uri, imagedata: parseddata})
           })
           .catch(error => console.log('error', error));
