@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, useWindowDimensions, Dimensions, Image,TextInput,TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { View, useWindowDimensions, Dimensions, Image,TextInput,TouchableOpacity, StyleSheet, Text, Alert } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import styled from 'styled-components';
 import { BarChart } from 'react-native-chart-kit';
@@ -12,7 +12,8 @@ import CardItem from '../components/CardItem';
 import { Sugar } from '../models/Sugar';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AsyncStorage } from 'react-native';
-
+import moment from 'moment';
+import Utils from '../utility/utils';
 const screenWidth = Dimensions.get("window").width;
 
 const data = {
@@ -146,7 +147,7 @@ const WrapView = styled.View`
         const obj = new Sugar(Date.now(), date, parseInt(sugarInputStr));
         AsyncStorage.setItem(key, JSON.stringify(obj))
         .then(() => {
-            console.log('saved');
+            Alert.alert('Sugar Tracker', `Saved reading for ${moment(date).format(Utils.getDateFormat())}`);
         })
     };
     let sugarInputStr = '142';
@@ -154,7 +155,7 @@ const WrapView = styled.View`
     return (
         <Page>
             <DateView>
-                <BoldText onPress={showDatepicker}>{date.toLocaleDateString("en-US", dateOptions)}</BoldText>
+                <BoldText onPress={showDatepicker}>{moment(date).format(Utils.getDateFormat())}</BoldText>
                 {show && (
                     <DateTimePicker
                         testID="dateTimePicker"

@@ -77,7 +77,7 @@ const ProfilePage = props => {
         height='150px'
         onSelect={() => console.log('no action')}>
        <FlexItem>
-       <Image source={require('../assets/user.png')}/>
+       <Image source={require('../assets/Sample_User_Icon.png')}/>
         <TextFlex>
           <UserText>{user.name}</UserText>
           <PhoneText>{user.phone}</PhoneText>

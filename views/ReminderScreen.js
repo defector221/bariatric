@@ -4,6 +4,8 @@ import { View, useWindowDimensions, Image, TouchableOpacity, StyleSheet, Text } 
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AsyncStorage } from 'react-native';
+import moment from 'moment';
+import Utils from '../utility/utils';
 
 import styled from 'styled-components';
 
@@ -229,7 +231,6 @@ export default function ReminderScreen({ navigation })
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [medications, setMedications] = useState([]);
-    const dateOptions = { weekday: 'short', year: '2-digit', month: 'long', day: 'numeric' };
     const onChange = (event, selectedDate) =>
     {
         const currentDate = selectedDate || date;
@@ -298,7 +299,7 @@ export default function ReminderScreen({ navigation })
     return (
         <Page>
             <DateView>
-                <BoldText onPress={showDatepicker}>{date.toLocaleDateString("en-US", dateOptions)}</BoldText>
+                <BoldText onPress={showDatepicker}>{moment(date).format(Utils.getDateFormat())}</BoldText>
                 {show && (
                     <DateTimePicker
                         testID="dateTimePicker"

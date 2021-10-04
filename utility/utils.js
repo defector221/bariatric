@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import { Alert, AsyncStorage } from 'react-native';
 
 export default Utils =  {
     isLoggedIn: async function(callback) {
@@ -34,7 +34,8 @@ export default Utils =  {
                 callback && callback(json)
             });
         }).catch(res => {
-            callback && callback(res)
+            Alert.alert('Error', 'Either email or password is invalid');
+            //callback && callback(res)
         });
     },
 
@@ -52,7 +53,8 @@ export default Utils =  {
                 callback && callback({status: 200})
             });
         }).catch(res => {
-            callback && callback(res)
+            Alert.alert('Error', 'Signup Error');
+            //callback && callback(res)
         });
     },
 
@@ -72,7 +74,12 @@ export default Utils =  {
             console.log(json);
             callback && callback(json.user)
         }).catch(res => {
-            callback && callback(res)
+            Alert.alert('Error', 'Internal Server Error');
+            // callback && callback(res)
         });
-    }
+    },
+
+    getDateFormat: function() {
+        return 'D MMMM YYYY, dddd';
+    } 
 }

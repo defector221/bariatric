@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Dimensions, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import styled from 'styled-components';
 import { BarChart } from 'react-native-chart-kit';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
+import Utils from '../utility/utils';
 
 import Colors from '../constants/Colors';
 import Page from '../components/Page';
@@ -100,10 +102,41 @@ color: ${Colors.textColor};
   margin-horizontal:20%;
   
   `
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const onChange = (event, selectedDate) =>
+    {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        navigation.date = currentDate;
+    };
+
+    const showMode = (currentMode) =>
+    {
+        setShow(true);
+        setMode(currentMode);
+    };
+
+    const showDatepicker = () =>
+    {
+        showMode('date');
+    };
     return (
         <Page>
             <DateView>
-                <BoldText>13 April 2021, Tuesday</BoldText>
+                <BoldText onPress={showDatepicker}>{moment(date).format(Utils.getDateFormat())}</BoldText>
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChange}
+                    />
+                )}
             </DateView>
             <CustomTabView>
                 <SubText1>Sleep Information</SubText1>

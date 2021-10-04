@@ -66,7 +66,7 @@ const CommunitySupport = props => {
 
         </FlexItem1>
       </CardItem>
-      <Image source={require('../assets/user.png')} style={{height:30,width:30}}/>
+      <Image source={require('../assets/Sample_User_Icon.png')} style={{height:30,width:30}}/>
 
       <CardItem
         color='#D7F4EF'
@@ -78,7 +78,7 @@ const CommunitySupport = props => {
 week cardio challenge today.</PhoneText>
         </FlexItem2>
       </CardItem>
-      <Image source={require('../assets/user.png')} style={{height:30,width:30,marginLeft:310}}/>
+      <Image source={require('../assets/Sample_User_Icon.png')} style={{height:30,width:30,marginLeft:310}}/>
       
     </Page>
   );
