@@ -120,81 +120,87 @@ const AuthNavigator = createStackNavigator({
 
 
 
-const DashboardTabNavigator = createBottomTabNavigator({
-  Home: {
+// const DashboardTabNavigator = createBottomTabNavigator({
+//   Home: {
+//     screen: MenuScreen,
+//     navigationOptions: {
+//       tabBarIcon: tabInfo => {
+//         return (
+//           <Ionicons name="home" size={25} color={tabInfo.tintColor} />
+//         );
+//       },
+//       tabBarColor: Colors.primaryColor,
+//       title:'',
+//     }
+//   },
+//   Camera: {
+//     screen: ImagePicker,
+//     navigationOptions: {
+//       tabBarIcon: tabInfo => {
+//         return <Ionicons name="camera" size={25} color={tabInfo.tintColor} />;
+//       },
+//       tabBarColor: Colors.accentColor,
+//       title:'',
+//     }
+//   },
+//   User: {
+//    screen: ProfilePage,
+//    navigationOptions: {
+//      tabBarIcon: tabInfo => {
+//        return <Ionicons name="person-circle" size={25} color={tabInfo.tintColor} />;
+//      },
+//      tabBarColor: Colors.accentColor,
+//      title:'',
+//      headerTitle:'My Profile'
+//    }
+//   },
+//   }, 
+//   {
+//   tabBarOptions: {
+//     activeTintColor: Colors.accentColor
+//   },
+//   navigationOptions: ({ navigation }) => {
+//     const {routeName}=navigation.state.routes[navigation.state.index]
+//     return {
+//       headerTitle: routeName,
+//       headerLeft: () =>
+//         <HeaderButtons HeaderButtonComponent={HeaderButton}>
+//           <Item
+//             title="Menu"
+//             iconName="ios-menu"
+//             onPress={() => {
+//               navigation.toggleDrawer();
+//             }}
+//           />
+//         </HeaderButtons>,
+//       headerRight: () =>
+//         <View style={styles.headerIcons}>
+//           {/* Reminder Screen */}
+//           <TouchableOpacity style={styles.Icon} activeOpacity={0.7} 
+//             onPress={()=>navigation.navigate('ReminderScreen')}>
+//             <Image source={require('../assets/handIcon.png')} />
+//           </TouchableOpacity >
+//           {/* Notification Screen */}
+//           <TouchableOpacity style={styles.Icon} activeOpacity={0.7} 
+//           onPress={()=>navigation.navigate('NotificationsScreen')}>
+//             <Image source={require('../assets/bellIcon.png')} />
+//           </TouchableOpacity >
+  
+//         </View >,
+  
+//     };
+//   }
+// })
+
+const DashboardStackNavigator = createStackNavigator({
+  // DashboardTabNavigator:{
+  //   screen: DashboardTabNavigator,
+  // },
+  DashboardScreen: {
     screen: MenuScreen,
     navigationOptions: {
-      tabBarIcon: tabInfo => {
-        return (
-          <Ionicons name="home" size={25} color={tabInfo.tintColor} />
-        );
-      },
-      tabBarColor: Colors.primaryColor,
-      title:'',
+      title: 'Home',
     }
-  },
-  Camera: {
-    screen: ImagePicker,
-    navigationOptions: {
-      tabBarIcon: tabInfo => {
-        return <Ionicons name="camera" size={25} color={tabInfo.tintColor} />;
-      },
-      tabBarColor: Colors.accentColor,
-      title:'',
-    }
-  },
-  User: {
-   screen: ProfilePage,
-   navigationOptions: {
-     tabBarIcon: tabInfo => {
-       return <Ionicons name="person-circle" size={25} color={tabInfo.tintColor} />;
-     },
-     tabBarColor: Colors.accentColor,
-     title:'',
-     headerTitle:'My Profile'
-   }
-  },
-  }, 
-  {
-  tabBarOptions: {
-    activeTintColor: Colors.accentColor
-  },
-  navigationOptions: ({ navigation }) => {
-    const {routeName}=navigation.state.routes[navigation.state.index]
-    return {
-      headerTitle: routeName,
-      headerLeft: () =>
-        <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Menu"
-            iconName="ios-menu"
-            onPress={() => {
-              navigation.toggleDrawer();
-            }}
-          />
-        </HeaderButtons>,
-      headerRight: () =>
-        <View style={styles.headerIcons}>
-          {/* Reminder Screen */}
-          <TouchableOpacity style={styles.Icon} activeOpacity={0.7} 
-            onPress={()=>navigation.navigate('ReminderScreen')}>
-            <Image source={require('../assets/handIcon.png')} />
-          </TouchableOpacity >
-          {/* Notification Screen */}
-          <TouchableOpacity style={styles.Icon} activeOpacity={0.7} 
-          onPress={()=>navigation.navigate('NotificationsScreen')}>
-            <Image source={require('../assets/bellIcon.png')} />
-          </TouchableOpacity >
-  
-        </View >,
-  
-    };
-  }
-})
-
-const DashboardStackNavigator =createStackNavigator({
-  DashboardTabNavigator:{
-    screen: DashboardTabNavigator,
   },
   CameraScreen: {
     screen: ImagePicker,
