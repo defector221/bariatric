@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Dimensions, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import styled from 'styled-components';
 import { BarChart } from 'react-native-chart-kit';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Utils from '../utility/utils';
-
+import User from '../models/User';
 import Colors from '../constants/Colors';
 import Page from '../components/Page';
 import CardItem from '../components/CardItem';
@@ -105,6 +105,7 @@ color: ${Colors.textColor};
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const [user, setUser] = useState({name: ''});
     const onChange = (event, selectedDate) =>
     {
         const currentDate = selectedDate || date;
@@ -123,6 +124,20 @@ color: ${Colors.textColor};
     {
         showMode('date');
     };
+
+    useEffect(()=>{
+        Utils.getMyProfile(user => {
+          const newUser = new User(
+            user.id,
+            user.phone_number,
+            user.email_id,
+            user.user_name,
+            user.first_name,
+            user.last_name
+          );
+          setUser(newUser);
+        });
+      }, [])
     return (
         <Page>
             <DateView>
@@ -163,7 +178,7 @@ color: ${Colors.textColor};
                 color='#DBF6E9'
                 height='110px'
             >
-                <UserName>Jane Doe</UserName>
+                <UserName>{user.name}</UserName>
                 <WrapView>
                     <Image source={require('../assets/moonsleepIcon.png')} />
                     <Text style={{ paddingHorizontal: 10 }}>Bedtime + 7 Hrs = Wakeup</Text>

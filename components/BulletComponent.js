@@ -1,14 +1,14 @@
 import React from 'react';
 import {StyleSheet,View,Text} from 'react-native'
 
-const BulletComponent=({text})=>{
+const BulletComponent=({text, style})=>{
     return <>
     <View style={ styles.row }>
           <View style={ styles.bullet }>
             <Text>{'\u2022' + " "}</Text>
           </View>
           <View style={ styles.bulletText }>
-            <Text>{text}</Text>
+            <Text style={style}>{text}</Text>
           </View>
         </View>
     </>

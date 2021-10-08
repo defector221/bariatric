@@ -15,6 +15,11 @@ import styled from 'styled-components';
 import BulletComponent from '../components/BulletComponent';
 
 const BMICalculatorScreen = props => {
+  const underWeightStyle = {color: 'brown'};
+  const regularWeightStyle = {color: 'green'};
+  const overWeightStyle = {color: 'pink'};
+  const obeseWeightStyle = {color: 'red'};
+
   const YellowBorder=styled.View`
   width:70px;
   border:4px solid #DBDF00;
@@ -71,14 +76,25 @@ const BMICalculatorScreen = props => {
   color: #000000;
   padding:10px;
   `
-
+  const textColor = { color: '#000000'};
+  if(props.navigation.state.params && props.navigation.state.params.BMI) {
+    if(props.navigation.state.params.BMI < 18.5) {
+      textColor.color = underWeightStyle.color;
+    } else if(props.navigation.state.params.BMI < 25) {
+      textColor.color = regularWeightStyle.color;
+    } else if(props.navigation.state.params.BMI < 30) {
+      textColor.color = overWeightStyle.color;
+    } else {
+      textColor.color = obeseWeightStyle.color;
+    }
+  }
   return (
     <Page>
       <CardItem
         color='#FFFFFF'
         height='110px'
         onSelect={() => console.log('no action')}>
-          <BoldText>Your BMI is {props.navigation.state.params ? props.navigation.state.params.BMI : 'Check Again'}</BoldText>
+          <BoldText style={textColor}>Your BMI is {props.navigation.state.params ? props.navigation.state.params.BMI : 'Check Again'}</BoldText>
           {/* <LineView>
             <YellowBorder/>
             <GreenBorder/>
@@ -92,10 +108,10 @@ const BMICalculatorScreen = props => {
         height='200px'
         onSelect={() => console.log('no action')}>
            <BoldText2>BMI Chart</BoldText2>
-           <BulletComponent text="Underweight <18.5"/>
-           <BulletComponent text="Normal weight 18.5- 25"/>
-           <BulletComponent text="Overweight 25- 30"/>
-           <BulletComponent text="Obese > 30"/>
+           <BulletComponent text="Underweight <18.5" style={underWeightStyle}/>
+           <BulletComponent text="Normal weight 18.5- 25" style={regularWeightStyle} />
+           <BulletComponent text="Overweight 25- 30" style={overWeightStyle} />
+           <BulletComponent text="Obese > 30" style={obeseWeightStyle} />
          
       </CardItem>
       <CardItem
@@ -103,7 +119,7 @@ const BMICalculatorScreen = props => {
         height='110px'
         onSelect={() => console.log('no action')}>
         <BulletComponent text="For most adults, an ideal BMI is in the 18.5 to 24.9 range."/>
-        <BulletComponent text="For children and young people aged 2 to 18."/>
+        <BulletComponent text="For children and young people BMI ranges from 2 to 18."/>
       </CardItem>
     </Page>
   );

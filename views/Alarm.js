@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View,  TouchableOpacity, Image,TextInput } from 'react-native';
 import styled from 'styled-components';
-import { useState } from 'react/cjs/react.development';
+import Utils from '../utility/utils';
+import User from '../models/User';
 
 export default function Alarm({ navigation }) {
   const [bedtime,onChangebedtime]=useState();
   const [wakeuptime,onChangewakeuptime]=useState();
+  const [user, setUser] = useState({name: ''});
   
   const GoodMorningText=styled.Text`
   font-style: normal;
@@ -27,14 +29,26 @@ export default function Alarm({ navigation }) {
   font-size: 18px;
   color: #000000;
   `
-
+  useEffect(()=>{
+    Utils.getMyProfile(user => {
+      const newUser = new User(
+        user.id,
+        user.phone_number,
+        user.email_id,
+        user.user_name,
+        user.first_name,
+        user.last_name
+      );
+      setUser(newUser);
+    });
+  }, [])
   return (
       <>
         <Image style={styles.logo} source={require('../assets/alarmscreen.png')} />
         
         <View>
             <GoodMorningText>Good Morning!</GoodMorningText>
-            <UserName>Jane Doe</UserName>
+            <UserName>{user.name}</UserName>
         </View>
         <View  style={styles.labelContainer}>
         <View>

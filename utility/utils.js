@@ -9,6 +9,7 @@ export default Utils =  {
 
     doLogout: async function(callback) {
         await AsyncStorage.removeItem('LOGIN::USER::RES');
+        await AsyncStorage.removeItem('LOGIN::USER::RES::USER');
         callback && callback(true);
         return true;
     },
@@ -59,6 +60,12 @@ export default Utils =  {
     },
 
     getMyProfile: async function(callback){
+        let user = await AsyncStorage.getItem('LOGIN::USER::RES::USER');
+        if(user) {
+            user = JSON.parse(user);
+            callback && callback(user)
+            return user;
+        }
         const loginResStr = await AsyncStorage.getItem('LOGIN::USER::RES'); 
         console.log(loginResStr);
         const loginRes = JSON.parse(loginResStr);
@@ -72,7 +79,10 @@ export default Utils =  {
             }
         }).then(res => res.json()).then(json => {
             console.log(json);
-            callback && callback(json.user)
+            AsyncStorage.setItem('LOGIN::USER::RES::USER', JSON.stringify(json.user))
+            .then(() => {
+                callback && callback(json.user)
+            });
         }).catch(res => {
             Alert.alert('Error', 'Internal Server Error');
             // callback && callback(res)
