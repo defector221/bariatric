@@ -288,7 +288,7 @@ const DashboardStackNavigator = createStackNavigator({
       title: 'Settings',
     }
   },
-  Alarm:{
+  AlarmScreen:{
     screen:Alarm,
     navigationOptions:{
        title:'Alarm',

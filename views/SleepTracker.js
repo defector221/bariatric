@@ -164,7 +164,9 @@ color: ${Colors.textColor};
                     borderRadius: 12,
                 }}>
                     <TouchableOpacity onPress={() => {
-                    navigation.navigate('Alarm')
+                    navigation.navigate({
+                        routeName: 'AlarmScreen',
+                    })
                 }}
                     >
                     <Text style={{ marginHorizontal: 15, marginVertical: 6, fontSize: 14, color: '#4FB6AD' }}>
